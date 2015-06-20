@@ -1,6 +1,6 @@
 {
   "name": "nodebb-plugin-import-esotalk2",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "An esoTalk forum exporter to import-ready files",
   "main": "./index.js",
   "scripts": {

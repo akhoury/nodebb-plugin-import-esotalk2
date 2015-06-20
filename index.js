@@ -58,7 +58,7 @@ var logPrefix = '[nodebb-plugin-import-esotalk2]';
         Exporter.connection.query(query,
             function(err, rows) {
                 if (err) {
-                    Exporter.error(err);
+                    Exporter.error(query, err);
                     return callback(err);
                 }
 
@@ -112,7 +112,7 @@ var logPrefix = '[nodebb-plugin-import-esotalk2]';
         Exporter.connection.query(query,
             function(err, rows) {
                 if (err) {
-                    Exporter.error(err);
+                    Exporter.error(query, err);
                     return callback(err);
                 }
 
@@ -183,7 +183,7 @@ var logPrefix = '[nodebb-plugin-import-esotalk2]';
         Exporter.connection.query(query,
             function(err, rows) {
                 if (err) {
-                    Exporter.error(err);
+                    Exporter.error(query, err);
                     return callback(err);
                 }
 
@@ -222,13 +222,13 @@ var logPrefix = '[nodebb-plugin-import-esotalk2]';
 
             + prefix + 'conversation.startTime as _topic_timestamp '
 
-            + 'FROM ' + prefix + 'post, _conversation '
+            + 'FROM ' + prefix + 'post, ' + prefix + 'conversation '
             // this post cannot be a its topic's main post, it MUST be a reply-post
             // see https://github.com/akhoury/nodebb-plugin-import#important-note-on-topics-and-posts
             // However, I’m throwing the main posts out below, can’t do it in mysql due to esoTalks
             // database structure ... this will not work well for many records of course, so if you
             // have a BIG esoTalk Forum, you should develop a better solution!
-            + 'WHERE ' + prefix + 'post.conversationId=' + prefix + 'conversation.conversationId'
+            + 'WHERE ' + prefix + 'post.conversationId=' + prefix + 'conversation.conversationId '
 
 			+ (start >= 0 && limit >= 0 ? 'LIMIT ' + start + ',' + limit : '');
 
@@ -239,11 +239,13 @@ var logPrefix = '[nodebb-plugin-import-esotalk2]';
             return callback(err);
         }
 
+		console.log(query);
+
         Exporter.connection.query(query,
             function(err, rows) {
                 var i;
                 if (err) {
-                    Exporter.error(err);
+                    Exporter.error(query, err);
                     return callback(err);
                 }
 
@@ -320,7 +322,7 @@ var logPrefix = '[nodebb-plugin-import-esotalk2]';
                 Exporter.getPaginatedTopics(0, 1000, next);
             },
             function(next) {
-                Exporter.getPaginatedPosts(1001, 2000, next);
+                Exporter.getPaginatedPosts(0, 50000, next);
             },
             function(next) {
                 Exporter.teardown(next);

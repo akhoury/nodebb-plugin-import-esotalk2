@@ -1,13 +1,14 @@
 var fs = require('fs-extra');
 
-require('./index').testrun({
+require('./index').paginatedTestrun({
     dbhost: 'localhost',
     dbport: 3306,
-    dbname: 'ubb_db',
+    dbname: 'esotalk',
     dbuser: 'user',
     dbpass: 'password',
 
     tablePrefix: 'et_'
 }, function(err, results) {
+    console.log(err);
     // fs.writeFileSync('./results.json', JSON.stringify(results, undefined, 2));
 });
